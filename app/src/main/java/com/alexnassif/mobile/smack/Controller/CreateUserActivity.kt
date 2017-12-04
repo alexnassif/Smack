@@ -1,11 +1,13 @@
 package com.alexnassif.mobile.smack.Controller
 
+import android.content.Context
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.alexnassif.mobile.smack.R
 import com.alexnassif.mobile.smack.Services.AuthService
+import com.alexnassif.mobile.smack.Services.UserDataService
 import kotlinx.android.synthetic.main.activity_create_user.*
 import java.util.*
 
@@ -54,7 +56,7 @@ class CreateUserActivity : AppCompatActivity() {
     }
 
     fun createUserClicked(view: View){
-
+        val userName = createUserNameText.text.toString()
         val email = createEmailText.text.toString()
         val password = createPasswordText.text.toString()
 
@@ -63,8 +65,14 @@ class CreateUserActivity : AppCompatActivity() {
 
                 AuthService.loginUser(this, email, password){
                     loginSuccess -> if(loginSuccess){
-                        println(AuthService.authToken)
-                        println(AuthService.userEmail)
+                        AuthService.createUser(this, userName, email, userAvatar, avatarColor){
+                            createSuccess -> if(createSuccess){
+                                println(UserDataService.avatarColor)
+                                println(UserDataService.avatarName)
+                                println(UserDataService.name)
+                                finish()
+                            }
+                        }
                     }
                 }
 
@@ -72,4 +80,5 @@ class CreateUserActivity : AppCompatActivity() {
         }
 
     }
+
 }
